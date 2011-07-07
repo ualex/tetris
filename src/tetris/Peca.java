@@ -19,6 +19,10 @@ public abstract class Peca {
 			for(int col = 0; col < 4; col++)
 				if(kernel[row][col] == 1) {					
 					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);					
+				} else {
+					g.setColor(Color.yellow);
+					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
+					g.setColor(Color.cyan);
 				}
 
 		
@@ -61,9 +65,11 @@ public abstract class Peca {
 		for(byte col = 0; col < 2; col++) {
 			for(byte row = 0; row < 4; row++) {
 				byte current_value = transposta[row][col];
-				byte newCol = (byte) (3 - col);				
+				byte newCol = (byte) (3 - col);	
+				
 				transposta[row][col] = transposta[row][newCol];
-				transposta[row][newCol] = current_value;					
+				transposta[row][newCol] = current_value;
+				
 			}			
 		}
 
