@@ -40,7 +40,7 @@ public class Tela extends JFrame {
 					grid.moverEsquerda();
 				} else if (evento.getKeyCode() == 39) {
 					grid.moverDireita();
-				} else if(evento.getKeyChar() == 40) {
+				} else if(evento.getKeyCode() == 40) {
 					grid.moverBaixo();
 				} else if(evento.getKeyCode() == 38) {
 					grid.rotacionar();

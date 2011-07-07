@@ -12,6 +12,7 @@ public class Grid extends JPanel {
 	int contador = 0;
 	int direcao  = 220;
 	int rotacao  = 0;
+	int auxTempo = 0;
 	private Peca peca;
 	
 	public Grid() {
@@ -52,11 +53,16 @@ public class Grid extends JPanel {
 					//peca = new I();
 					desenhar();					
 					try {
-						Thread.sleep(500);
+						Thread.sleep(1);
+						auxTempo++;
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					contador+=20;
+					if (auxTempo >= 500) {
+						contador+=20;
+						auxTempo = 0;
+					}
+					
 					if (contador == 480)
 						contador = 0;					
 				}
@@ -95,7 +101,7 @@ public class Grid extends JPanel {
 	public void moverBaixo() {
 		if (contador == 460)
 			return;
-		direcao+=20;		
+		contador+=20;
 	}
 	public void rotacionar() {
 		rotacao++;
