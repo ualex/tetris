@@ -1,13 +1,15 @@
 package tetris;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-
 import javax.swing.JPanel;
 
 public class Grid extends JPanel {
 
-	private static final long serialVersionUID = 2077176596376777249L;
+	private static final long serialVersionUID = 2077176596376777249L;	
+	List<Peca> pecas = new ArrayList<Peca>();
 	
 	int contador = 0;
 	int direcao  = 220;
@@ -25,7 +27,6 @@ public class Grid extends JPanel {
 					if (contador == 0) {
 						Random random = new Random(System.currentTimeMillis());
 						int pecaSorteada = random.nextInt(6);
-						System.out.println("Peca sorteada:"+pecaSorteada);
 						switch(pecaSorteada) {
 							case 0:
 								peca = new I();
@@ -53,21 +54,28 @@ public class Grid extends JPanel {
 					//peca = new I();
 					desenhar();					
 					try {
-						Thread.sleep(1);
+						Thread.sleep(500);
 						auxTempo++;
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					if (auxTempo >= 500) {
-						contador+=20;
-						auxTempo = 0;
-					}
+					contador+=20;
 					
-					if (contador == 480)
-						contador = 0;					
+					if (parar()) {
+						contador = 0;
+						pecas.add(peca);
+					}
 				}
 			}
+
+
 		}).start();
+	}
+	private boolean parar() {
+		if (contador + (peca.getDeep() * 20) == 460)
+			return true;
+		else
+			return false;
 	}
 	private void desenhar() {					
 		peca.setY(contador);
@@ -85,7 +93,10 @@ public class Grid extends JPanel {
 			g.drawLine((i*grid), 0, (i*grid), 480); //vertical
 			g.drawLine(0, (i*grid), 480, (i*grid));//horizontal
 		}		
-				
+		//desenhar pecas antigas
+		for(Peca peca2 : pecas) {
+			peca2.desenhar(g);
+		}
 		peca.desenhar(g);
 	}
 	public void moverEsquerda() {
@@ -99,7 +110,7 @@ public class Grid extends JPanel {
 		direcao+=20;		
 	}
 	public void moverBaixo() {
-		if (contador == 460)
+		if (contador == 440)
 			return;
 		contador+=20;
 	}

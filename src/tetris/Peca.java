@@ -7,6 +7,7 @@ public abstract class Peca {
 
 	private int x;
 	private int y;
+	private int deep;
 	private int rotacao;
 	public abstract byte[][] getKernel();
 	public abstract void setKernel(byte[][] newKernel);
@@ -15,19 +16,21 @@ public abstract class Peca {
 		g.setColor(Color.cyan);
 		byte [][] kernel = getKernel();
 		
-		for(int row = 0; row < 4; row++)
+		for(int row = 0; row < 4; row++) {
 			for(int col = 0; col < 4; col++)
 				if(kernel[row][col] == 1) {					
-					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);					
-				} else {
-					g.setColor(Color.yellow);
 					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
-					g.setColor(Color.cyan);
-				}
-
-		
+					deep = row;
+				} 		
+		}
 	}
 
+	public int getDeep() {
+		return deep;
+	}
+	public void setDeep(int deep) {
+		this.deep = deep;
+	}
 	public int getX() {
 		return x;
 	}
