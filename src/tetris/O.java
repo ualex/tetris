@@ -1,16 +1,18 @@
 package tetris;
 
-import java.awt.Color;
-import java.awt.Graphics;
+
 
 public class O extends Peca {
+
+	byte [][] kernel = {{0,1,1,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}};
+
 	@Override
-	public void desenhar(Graphics g) {		
-		g.setColor(Color.yellow);	
-		g.fillRect(getX()+1, getY()+1, 19, 19);
-		g.fillRect(20 + getX()+1, getY()+1, 19, 19);
+	public byte[][] getKernel() {		
+		return kernel;
+	}
+	@Override
+	public void setKernel(byte[][] newKernel) {
+		this.kernel = newKernel;
 		
-		g.fillRect(getX()+1, 20+getY()+1, 19, 19);
-		g.fillRect(20 + getX()+1, 20+getY()+1, 19, 19);
 	}
 }

@@ -49,7 +49,7 @@ public class Grid extends JPanel {
 								break;
 						}
 					}
-					peca = new I();
+					//peca = new I();
 					desenhar();					
 					try {
 						Thread.sleep(500);
@@ -102,6 +102,7 @@ public class Grid extends JPanel {
 		if (rotacao == 4)
 			rotacao = 0;
 		
+		peca.rotacionar();
 	}
 
 	
