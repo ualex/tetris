@@ -23,7 +23,6 @@ public class Grid extends JPanel {
 			@Override
 			public void run() {
 				while(true) {
-					System.out.println("Contador:"+contador);
 					if (contador == 0) {
 						Random random = new Random(System.currentTimeMillis());
 						int pecaSorteada = random.nextInt(6);
@@ -51,8 +50,9 @@ public class Grid extends JPanel {
 								break;
 						}
 					}
-					//peca = new I();
-					desenhar();					
+					
+					desenhar();
+					
 					try {
 						Thread.sleep(500);
 						auxTempo++;
@@ -61,7 +61,7 @@ public class Grid extends JPanel {
 					}
 					contador+=20;
 					
-					if (parar()) {
+					if (parar() || bateu()) {
 						contador = 0;
 						pecas.add(peca);
 					}
@@ -72,10 +72,20 @@ public class Grid extends JPanel {
 		}).start();
 	}
 	private boolean parar() {
-		if (contador + (peca.getDeep() * 20) == 460)
+		if (contador  == 440)
 			return true;
 		else
 			return false;
+	}
+	private boolean bateu() {
+		for(Peca antiga : pecas) {
+			if (antiga.getY() <= peca.getY()+80) {
+				if (Math.abs(antiga.getX() - peca.getX()) < 80) {
+					return !antiga.encaixa(peca);
+				}
+			}
+		}
+		return false;
 	}
 	private void desenhar() {					
 		peca.setY(contador);
@@ -110,14 +120,14 @@ public class Grid extends JPanel {
 		direcao+=20;		
 	}
 	public void moverBaixo() {
-		if (contador == 440)
-			return;
-		contador+=20;
+		if (parar() || bateu()) {
+			contador = 0;
+			pecas.add(peca);
+		} else {
+			contador+=20;
+		}
 	}
 	public void rotacionar() {
-		rotacao++;
-		if (rotacao == 4)
-			rotacao = 0;
 		
 		peca.rotacionar();
 	}

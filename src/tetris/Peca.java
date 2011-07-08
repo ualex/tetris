@@ -7,7 +7,8 @@ public abstract class Peca {
 
 	private int x;
 	private int y;
-	private int deep;
+	
+	
 	private int rotacao;
 	public abstract byte[][] getKernel();
 	public abstract void setKernel(byte[][] newKernel);
@@ -20,17 +21,14 @@ public abstract class Peca {
 			for(int col = 0; col < 4; col++)
 				if(kernel[row][col] == 1) {					
 					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
-					deep = row;
-				} 		
+				} else {
+					//g.setColor(Color.yellow);
+					//g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
+					//g.setColor(Color.cyan);
+				}
 		}
 	}
 
-	public int getDeep() {
-		return deep;
-	}
-	public void setDeep(int deep) {
-		this.deep = deep;
-	}
 	public int getX() {
 		return x;
 	}
@@ -49,7 +47,7 @@ public abstract class Peca {
 
 	public int getRotacao() {
 		return rotacao;
-	}
+	}	
 
 	public void setRotacao(int rotacao) {
 		this.rotacao = rotacao;
@@ -77,6 +75,34 @@ public abstract class Peca {
 		}
 
 		setKernel(transposta);
+	}
+	public boolean encaixa(Peca peca) {
+		int a = 0;
+		int b = 0;
+		for(int row = 0; row < getKernel().length; row++) {
+			for(int col = 0; col < getKernel()[row].length; col++) {
+				if (peca.getKernel()[row][col] == 1)
+					a = row;
+			}
+		}
+		for(int row = 0; row < getKernel().length; row++) {
+			for(int col = 0; col < getKernel()[row].length; col++) {
+				if (getKernel()[row][col] == 1)
+					b = row;
+				break;
+			}
+		}
+		System.out.println("a e b:"+a+"-"+b);
+		
+		if (a - (b+1) == 1 ){
+			for(int row = 0; row < getKernel().length; row++) {
+				for(int col = 0; col < getKernel()[row].length; col++) {
+					if (peca.getKernel()[row][col] == 1 && getKernel()[row][col] == 1)
+						return false;
+				}
+			}
+		}
+		return true;
 	}
 		
 }
