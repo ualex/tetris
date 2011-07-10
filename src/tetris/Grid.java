@@ -26,7 +26,7 @@ public class Grid extends JPanel {
 				while(true) {
 					if (contador == 0) {
 						Random random = new Random(System.currentTimeMillis());
-						int pecaSorteada = random.nextInt(6);
+						int pecaSorteada = 6;// random.nextInt(6);
 						switch(pecaSorteada) {
 							case 0:
 								peca = new I();
@@ -63,6 +63,7 @@ public class Grid extends JPanel {
 					
 					contador+=20;
 					if (parar() || bateu()) {
+						System.out.println(parar()+"-"+bateu());
 						contador = 0;	
 						pecas.add(peca);
 					}
@@ -74,21 +75,31 @@ public class Grid extends JPanel {
 		}).start();
 	}
 	private boolean bateu() {
+		boolean bateu = false;
 		for(Peca antiga : pecas) {
-			System.out.println("X-X:"+antiga.getXReal()+"-"+peca.getXReal()+"-"+(peca.getWidth() ));
-			if (Math.abs(antiga.getXReal() - peca.getXReal()) - peca.getWidth() * 20 <= 0) {
-				if(peca.getYReal() + (peca.getHight() * 20) == antiga.getYReal()) {
-					System.out.println("pode bater:"+antiga.encaixa(peca));
-					return !antiga.encaixa(peca);
+			
+			//System.out.println("X:"+(peca.getXReal())+"-"+(peca.getWidth() * 20)+"-"+(antiga.getXReal()-20));
+//			System.out.println("Y:"+antiga.getY()+"-"+"-"+ peca.getY());
+			if(peca.getY() + (80) >= antiga.getY()) {
+				if (( Math.abs(peca.getX() - antiga.getX()) < 80)) {
+					if (peca.getAuxEncaixe() <= 3) { 
+						bateu = antiga.encaixa(peca);
+						System.out.println("pode bater:"+peca.getAuxEncaixe()+"-"+bateu+"-"+peca.getY()+"-"+peca.getHight()+"--"+antiga.getY());
+						peca.setAuxEncaixe(peca.getAuxEncaixe()+1);
+						if (peca.getAuxEncaixe() == 4)
+							return true;//peca encaixada
+						return !bateu;
+					}
+					//return !antiga.encaixa(peca);
+					
+					
 				}
 			}
 		}
-		return false;
+		return bateu;
 	}
 	private boolean parar() {
-		//System.out.println(contador+"-"+peca.getYReal()+"-"+(peca.getHight() * 20));
-		
-		if (peca.getYReal() + (peca.getHight() * 20)  == 480) {			
+		if (contador + (peca.getHight() * 20)  > 480) {			
 			return true;
 		} else
 			return false;
