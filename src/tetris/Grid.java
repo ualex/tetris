@@ -16,6 +16,7 @@ public class Grid extends JPanel {
 	int rotacao  = 0;
 	int auxTempo = 0;
 	private Peca peca;
+	private byte[][] mapa = new byte[24][24];
 	
 	public Grid() {
 		
@@ -55,38 +56,44 @@ public class Grid extends JPanel {
 					
 					try {
 						Thread.sleep(500);
-						auxTempo++;
+						
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					contador+=20;
 					
+					contador+=20;
 					if (parar() || bateu()) {
-						contador = 0;
+						contador = 0;	
 						pecas.add(peca);
 					}
+					
+					
 				}
 			}
 
-
 		}).start();
-	}
-	private boolean parar() {
-		if (contador  == 440)
-			return true;
-		else
-			return false;
 	}
 	private boolean bateu() {
 		for(Peca antiga : pecas) {
-			if (antiga.getY() <= peca.getY()+80) {
-				if (Math.abs(antiga.getX() - peca.getX()) < 80) {
+			System.out.println("X-X:"+antiga.getXReal()+"-"+peca.getXReal()+"-"+(peca.getWidth() ));
+			if (Math.abs(antiga.getXReal() - peca.getXReal()) - peca.getWidth() * 20 <= 0) {
+				if(peca.getYReal() + (peca.getHight() * 20) == antiga.getYReal()) {
+					System.out.println("pode bater:"+antiga.encaixa(peca));
 					return !antiga.encaixa(peca);
 				}
 			}
 		}
 		return false;
 	}
+	private boolean parar() {
+		//System.out.println(contador+"-"+peca.getYReal()+"-"+(peca.getHight() * 20));
+		
+		if (peca.getYReal() + (peca.getHight() * 20)  == 480) {			
+			return true;
+		} else
+			return false;
+	}
+
 	private void desenhar() {					
 		peca.setY(contador);
 		peca.setX(direcao);	
@@ -102,7 +109,14 @@ public class Grid extends JPanel {
 		for(int i = 0; i <= 24; i++) {
 			g.drawLine((i*grid), 0, (i*grid), 480); //vertical
 			g.drawLine(0, (i*grid), 480, (i*grid));//horizontal
-		}		
+		}
+		for(int i = 0; i <24; i++) {
+			g.drawString(i+" ", (i * 20), 20);
+			
+		}
+		for(int x = 1; x <24; x++) {
+			g.drawString(x+" ", 3, (x * 20)+20);
+		}
 		//desenhar pecas antigas
 		for(Peca peca2 : pecas) {
 			peca2.desenhar(g);
@@ -120,7 +134,7 @@ public class Grid extends JPanel {
 		direcao+=20;		
 	}
 	public void moverBaixo() {
-		if (parar() || bateu()) {
+		if (parar()) {
 			contador = 0;
 			pecas.add(peca);
 		} else {

@@ -7,7 +7,8 @@ public abstract class Peca {
 
 	private int x;
 	private int y;
-	
+	private int xReal = 0;
+	private int yReal = 0;
 	
 	private int rotacao;
 	public abstract byte[][] getKernel();
@@ -16,16 +17,23 @@ public abstract class Peca {
 	public void desenhar(Graphics g) {
 		g.setColor(Color.cyan);
 		byte [][] kernel = getKernel();
-		
+		xReal = yReal = 0;
+		int auxRow = 0;
+		int auxCol = 0;
 		for(int row = 0; row < 4; row++) {
-			for(int col = 0; col < 4; col++)
+			for(int col = 0; col < 4; col++) {
 				if(kernel[row][col] == 1) {					
 					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
-				} else {
-					//g.setColor(Color.yellow);
-					//g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
-					//g.setColor(Color.cyan);
-				}
+					if (xReal == 0 && yReal == 0){
+						xReal = (col *20) +getX();
+						yReal =  (row * 20) + getY();
+					}
+				}// else {
+				//	g.setColor(Color.yellow);
+				//	g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
+				//	g.setColor(Color.cyan);
+				
+			}
 		}
 	}
 
@@ -77,32 +85,51 @@ public abstract class Peca {
 		setKernel(transposta);
 	}
 	public boolean encaixa(Peca peca) {
-		int a = 0;
-		int b = 0;
-		for(int row = 0; row < getKernel().length; row++) {
-			for(int col = 0; col < getKernel()[row].length; col++) {
-				if (peca.getKernel()[row][col] == 1)
-					a = row;
-			}
-		}
-		for(int row = 0; row < getKernel().length; row++) {
-			for(int col = 0; col < getKernel()[row].length; col++) {
-				if (getKernel()[row][col] == 1)
-					b = row;
-				break;
-			}
-		}
-		System.out.println("a e b:"+a+"-"+b);
 		
-		if (a - (b+1) == 1 ){
 			for(int row = 0; row < getKernel().length; row++) {
+				
 				for(int col = 0; col < getKernel()[row].length; col++) {
-					if (peca.getKernel()[row][col] == 1 && getKernel()[row][col] == 1)
+					//System.out.println("Antiga:"+peca.getX()+"-"+peca.getY()+"atual:"+getX()+"-"+getY());
+					if (peca.getKernel()[row][col] == 1 && getKernel()[row][col] == 1) {
 						return false;
+					}
+				}
+				
+			}
+		
+
+		return true;
+	}
+	public int getXReal() {
+		return xReal;
+	}
+	public int getYReal() {
+		return yReal;
+	}
+	public int getHight() {
+		int hight  = 0;
+		for(int row = 0; row < 4; row++) {
+			for(int col = 0; col < 4; col++) {
+				if (getKernel()[row][col] == 1) {
+					hight +=1;
+					break;
 				}
 			}
 		}
-		return true;
+		return hight;			
+	}
+	public int getWidth() {
+		int width  = 0;
+		
+		for(int col = 0; col < 4; col++) {
+			for(int row = 0; row < 4; row++) {
+				if (getKernel()[row][col] == 1) {
+					width += 1;
+					break;
+				}
+			}
+		}
+		return width;
 	}
 		
 }
