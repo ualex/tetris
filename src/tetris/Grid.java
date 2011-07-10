@@ -26,7 +26,7 @@ public class Grid extends JPanel {
 				while(true) {
 					if (contador == 0) {
 						Random random = new Random(System.currentTimeMillis());
-						int pecaSorteada = 6;// random.nextInt(6);
+						int pecaSorteada = random.nextInt(6);
 						switch(pecaSorteada) {
 							case 0:
 								peca = new I();
@@ -52,20 +52,32 @@ public class Grid extends JPanel {
 						}
 					}
 					
-					desenhar();
+		
 					
-					try {
-						Thread.sleep(500);
-						
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
 					
-					contador+=20;
 					if (parar() || bateu()) {
-						System.out.println(parar()+"-"+bateu());
+
 						contador = 0;	
 						pecas.add(peca);
+						int x = peca.getX() / 20;
+						int y = peca.getY() / 20;
+						for(int row = 0; row < 4; row++) {
+							for(int col = 0; col < 4; col++) {
+								if(peca.getKernel()[row][col] == 1) {					
+									mapa[y+row][x+col] = 1;
+								}
+							}
+						}
+						imprimirMapa();
+					}else {
+						desenhar();
+						contador+=20;
+						try {
+							Thread.sleep(500);
+							
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 					
 					
@@ -74,27 +86,35 @@ public class Grid extends JPanel {
 
 		}).start();
 	}
+	private void imprimirMapa() {
+		
+		for(int row = 0; row < 24; row++) {
+			if (row == 0) {
+				for(int col = 0; col < 24; col++) {
+					System.out.print("	["+col+"]");
+				}
+				System.out.println("\n");
+			}
+			System.out.print("["+row+"]");
+			for(int col = 0; col < 24; col++) {
+				System.out.print((mapa[row][col] == 1 ? "*	" : "	")+mapa[row][col]);
+				//System.out.print("	"+mapa[row][col]);
+			}
+			System.out.println("\n");
+		}
+	}
 	private boolean bateu() {
 		boolean bateu = false;
-		for(Peca antiga : pecas) {
-			
-			//System.out.println("X:"+(peca.getXReal())+"-"+(peca.getWidth() * 20)+"-"+(antiga.getXReal()-20));
-//			System.out.println("Y:"+antiga.getY()+"-"+"-"+ peca.getY());
-			if(peca.getY() + (80) >= antiga.getY()) {
-				if (( Math.abs(peca.getX() - antiga.getX()) < 80)) {
-					if (peca.getAuxEncaixe() <= 3) { 
-						bateu = antiga.encaixa(peca);
-						System.out.println("pode bater:"+peca.getAuxEncaixe()+"-"+bateu+"-"+peca.getY()+"-"+peca.getHight()+"--"+antiga.getY());
-						peca.setAuxEncaixe(peca.getAuxEncaixe()+1);
-						if (peca.getAuxEncaixe() == 4)
-							return true;//peca encaixada
-						return !bateu;
-					}
-					//return !antiga.encaixa(peca);
-					
-					
+		int x = peca.getX() / 20;
+		int y = contador / 20;
+		for(int row = 0; row < 4; row++) {
+			for(int col = 0; col < 4; col++) {
+				//System.out.println(row+"-"+col+"-"+(y+row)+"-"+(x+col));
+				if(peca.getKernel()[row][col] == 1 && mapa[y+row][x+col] == 1) {					
+					 return true;
 				}
 			}
+			
 		}
 		return bateu;
 	}
