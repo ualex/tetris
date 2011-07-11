@@ -15,4 +15,8 @@ public class J extends Peca {
 		this.kernel = newKernel;
 		
 	}
+	@Override
+	public byte getCor() {		
+		return 7;
+	}	
 }

@@ -29,10 +29,14 @@ public class Teste {
 				}			
 			}
 			System.out.println("Girada em 90");
-			imprimir(transposta);
+			imprimir(transposta);			
+			//kernel = removeRow(transposta, 1);
+			System.out.println("Sem linha");
+			imprimir(kernel);
 			
 	}
-	
+
+
 	public static void imprimir(byte[][] transposta) {
 		for(byte row = 0; row < transposta.length; row++) {
 			for(byte col = 0; col < transposta[row].length; col++) {

@@ -7,15 +7,16 @@ public abstract class Peca {
 
 	private int x;
 	private int y;
-	private int auxEncaixe = 0;
+	
 
 	
 	private int rotacao;
 	public abstract byte[][] getKernel();
+	public abstract byte getCor();
 	public abstract void setKernel(byte[][] newKernel);
 	
 	public void desenhar(Graphics g) {
-		g.setColor(Color.cyan);
+		g.setColor(getColor(getCor()));
 		byte [][] kernel = getKernel();
 
 
@@ -82,33 +83,8 @@ public abstract class Peca {
 
 		setKernel(transposta);
 	}
-	public boolean encaixa(Peca peca) {
-			
-			if (peca.auxEncaixe < 3) {
-				for(int row = 0; row <= peca.auxEncaixe; row++) {				
-					for(int col = 0; col < getKernel()[row].length; col++) {
-						if (peca.getKernel()[3-row][col] == 1 && getKernel()[row][col] == 1) {
-							return false;
-						}
-					}
-				
-				}
-			} else if(peca.auxEncaixe == 3) { //encaixe total
-				for(int row = 0; row < getKernel().length; row++) {				
-					for(int col = 0; col < getKernel()[row].length; col++) {
-						if (peca.getKernel()[row][col] == 1 && getKernel()[row][col] == 1) {
-							return false;
-						}
-					}
-				
-				}				
-			}
-		
-
-		return true;
-	}
-
-	public int getHight() {
+	
+	public int getAltura() {
 		int hight  = 0;
 		boolean emBranco=true;
 		for(int row = 0; row < 4; row++) {
@@ -125,7 +101,7 @@ public abstract class Peca {
 		}
 		return hight;			
 	}
-	public int getWidth() {
+	public int getLargura() {
 		int width  = 0;
 		
 		for(int col = 0; col < 4; col++) {
@@ -138,12 +114,27 @@ public abstract class Peca {
 		}
 		return width;
 	}
-	public int getAuxEncaixe() {
-		return auxEncaixe;
-	}
-	public void setAuxEncaixe(int auxEncaixe) {
-		this.auxEncaixe = auxEncaixe;
-	}
 	
+	
+	public static Color getColor(byte indiceCor) {
+		switch(indiceCor) {
+			case 1:
+				return Color.cyan;
+			case 2:
+				return Color.yellow;
+			case 3:
+				return Color.green;
+			case 4:
+				return Color.red;
+			case 5:
+				return Color.blue;
+			case 6:
+				return Color.pink;
+			case 7:
+				return Color.magenta;
+								
+		}
+		return Color.white;
+	}
 	
 }

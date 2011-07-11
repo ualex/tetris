@@ -12,7 +12,10 @@ public class O extends Peca {
 	}
 	@Override
 	public void setKernel(byte[][] newKernel) {
-		this.kernel = newKernel;
-		
+		this.kernel = newKernel;		
+	}
+	@Override
+	public byte getCor() {		
+		return 6;
 	}
 }
