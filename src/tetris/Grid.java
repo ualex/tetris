@@ -1,20 +1,16 @@
 package tetris;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import javax.swing.JPanel;
 
 public class Grid extends JPanel {
 
 	private static final long serialVersionUID = 2077176596376777249L;	
-	List<Peca> pecas = new ArrayList<Peca>();
 	int pontuacao = 0;
 	int contador = 0;
-	int direcao  = 220;
-	int rotacao  = 0;
-	int auxTempo = 0;
+	int direcao  = 80;
+
 	private Peca peca;
 	private byte[][] mapa = new byte[16][16];
 	
@@ -27,6 +23,7 @@ public class Grid extends JPanel {
 					if (contador == 0) {
 						Random random = new Random(System.currentTimeMillis());
 						int pecaSorteada = random.nextInt(6);
+
 						switch(pecaSorteada) {
 							case 0:
 								peca = new I();
@@ -56,9 +53,9 @@ public class Grid extends JPanel {
 					
 					
 					if (parar() || bateu()) {
-
+						System.out.println("X:"+peca.getX());
 						contador = 0;	
-						pecas.add(peca);
+
 						int x = peca.getX() / 20;
 						int y = peca.getY() / 20;
 						for(int row = 0; row < 4; row++) {
@@ -84,19 +81,18 @@ public class Grid extends JPanel {
 								auxContador++;
 							}
 						}
-						if (auxContador > 0) {//resenha a tela
+						if (auxContador > 0) {//redesenha a tela
 							for(byte row : rows)
 								mapa = removeRow(mapa, row);
 							
 							desenhar();
 						}
 						
-						//imprimirMapa();
 					}else {
 						desenhar();
 						contador+=20;
 						try {
-							Thread.sleep(500);
+							Thread.sleep(1000);
 							
 						} catch (InterruptedException e) {
 							e.printStackTrace();
@@ -138,27 +134,12 @@ public class Grid extends JPanel {
 		}
 		return newMatrix;
 	}
-	private void imprimirMapa() {
-		
-		for(int row = 0; row < 24; row++) {
-			if (row == 0) {
-				for(int col = 0; col < 24; col++) {
-					System.out.print("	["+col+"]");
-				}
-				System.out.println("\n");
-			}
-			System.out.print("["+row+"]");
-			for(int col = 0; col < 24; col++) {
-				System.out.print((mapa[row][col] == 1 ? "*	" : "	")+mapa[row][col]);
-				//System.out.print("	"+mapa[row][col]);
-			}
-			System.out.println("\n");
-		}
-	}
+
 	private boolean bateu() {
 		boolean bateu = false;
 		int x = peca.getX() / 20;
 		int y = contador / 20;
+		
 		if (x == 16)
 			x = 15;
 		if (y == 16)
@@ -184,7 +165,6 @@ public class Grid extends JPanel {
 	private void desenhar() {					
 		peca.setY(contador);
 		peca.setX(direcao);	
-		peca.setRotacao(rotacao);
 		repaint();						
 	}	
 	public Dimension getPreferredSize() {
@@ -197,17 +177,14 @@ public class Grid extends JPanel {
 			g.drawLine((i*grid), 0, (i*grid), 480); //vertical
 			g.drawLine(0, (i*grid), 480, (i*grid));//horizontal
 		}
+		/*
 		for(int i = 0; i <24; i++) {
 			g.drawString(i+" ", (i * 20), 20);			
 		}
 		for(int x = 1; x <24; x++) {
 			g.drawString(x+" ", 3, (x * 20)+20);
-		}
-		//desenhar pecas antigas
-		/*
-		for(Peca peca2 : pecas) {
-			peca2.desenhar(g);
 		}*/
+	
 		for(int row = 0; row < mapa.length; row++) {
 			for(int col = 0; col < mapa[row].length; col++) {
 				if (mapa[row][col] > 0) {
@@ -219,23 +196,21 @@ public class Grid extends JPanel {
 		peca.desenhar(g);
 	}
 	public void moverEsquerda() {
-		direcao-=20;		
+		if (direcao > 0)
+			direcao-=20;		
 	}
 	public void moverDireita() {
-		direcao+=20;		
+		if (direcao + (peca.getLargura() * 20) <= 320)
+			direcao+=20;		
 	}
 	public void moverBaixo() {
 		if (parar()) {
 			contador = 0;
-			pecas.add(peca);
 		} else {
 			contador+=20;
 		}
 	}
-	public void rotacionar() {
-		
+	public void rotacionar() {		
 		peca.rotacionar();
-	}
-
-	
+	}	
 }

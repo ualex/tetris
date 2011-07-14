@@ -7,32 +7,25 @@ public abstract class Peca {
 
 	private int x;
 	private int y;
-	
-
-	
-	private int rotacao;
+	private boolean recalcularAltura = true;
+	private int altura  = 0;
 	public abstract byte[][] getKernel();
 	public abstract byte getCor();
 	public abstract void setKernel(byte[][] newKernel);
 	
 	public void desenhar(Graphics g) {
 		g.setColor(getColor(getCor()));
-		byte [][] kernel = getKernel();
-
-
+		byte [][] kernel = getKernel();		
 		for(int row = 0; row < 4; row++) {
 			for(int col = 0; col < 4; col++) {
 				if(kernel[row][col] == 1) {					
 					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
+				} else {
+					g.setColor(Color.yellow);
+					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
+					g.setColor(getColor(getCor()));
 				}
-				 else {
-					//g.setColor(Color.yellow);
-					//g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
-					//g.setColor(Color.cyan);
-				
-				 }
-
-		}
+			}
 		}
 	}
 
@@ -52,15 +45,8 @@ public abstract class Peca {
 		this.y = y;
 	}
 
-	public int getRotacao() {
-		return rotacao;
-	}	
-
-	public void setRotacao(int rotacao) {
-		this.rotacao = rotacao;
-	}
-
 	public void rotacionar() {
+		recalcularAltura = true;
 		byte [][] kernel = getKernel();
 		byte [][] transposta = new byte[4][4];
 		
@@ -83,9 +69,15 @@ public abstract class Peca {
 
 		setKernel(transposta);
 	}
-	
+	/**
+	 * calcula a altura real da peca
+	 * @return altura em unidades
+	 */
 	public int getAltura() {
-		int hight  = 0;
+		if (!recalcularAltura)
+			return altura; 
+		
+		altura  = 0;
 		boolean emBranco=true;
 		for(int row = 0; row < 4; row++) {
 			for(int col = 0; col < 4; col++) {
@@ -94,28 +86,28 @@ public abstract class Peca {
 					break;
 				}
 			}
-			if (!emBranco || hight == 0) {
-				hight++;
+			if (!emBranco || altura == 0) {
+				altura++;
 				emBranco=true;
 			}
 		}
-		return hight;			
+		return altura;			
 	}
+	/**
+	 * calcula o espço horizontal ocupado pela peca
+	 * @return largura
+	 */
 	public int getLargura() {
-		int width  = 0;
-		
-		for(int col = 0; col < 4; col++) {
-			for(int row = 0; row < 4; row++) {
-				if (getKernel()[row][col] == 1) {
-					width += 1;
-					break;
+		for(int row = getKernel().length-1; row >= 0; row--) {
+			for(int col = getKernel()[row].length-1; col >=0; col--) {
+				if (getKernel()[row][col] > 0) {
+					return col;
 				}
 			}
 		}
-		return width;
+		return 0;
 	}
-	
-	
+		
 	public static Color getColor(byte indiceCor) {
 		switch(indiceCor) {
 			case 1:
