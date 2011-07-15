@@ -21,9 +21,9 @@ public abstract class Peca {
 				if(kernel[row][col] == 1) {					
 					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
 				} else {
-					g.setColor(Color.yellow);
-					g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
-					g.setColor(getColor(getCor()));
+				//	g.setColor(Color.yellow);
+				//	g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
+				//	g.setColor(getColor(getCor()));
 				}
 			}
 		}
@@ -101,7 +101,7 @@ public abstract class Peca {
 		for(int row = getKernel().length-1; row >= 0; row--) {
 			for(int col = getKernel()[row].length-1; col >=0; col--) {
 				if (getKernel()[row][col] > 0) {
-					return col;
+					return col+1;
 				}
 			}
 		}

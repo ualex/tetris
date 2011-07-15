@@ -9,7 +9,7 @@ public class Grid extends JPanel {
 	private static final long serialVersionUID = 2077176596376777249L;	
 	int pontuacao = 0;
 	int contador = 0;
-	int direcao  = 80;
+	int direcao  = 120;
 
 	private Peca peca;
 	private byte[][] mapa = new byte[16][16];
@@ -21,6 +21,7 @@ public class Grid extends JPanel {
 			public void run() {
 				while(true) {
 					if (contador == 0) {
+						direcao = 120;
 						Random random = new Random(System.currentTimeMillis());
 						int pecaSorteada = random.nextInt(6);
 
@@ -49,11 +50,8 @@ public class Grid extends JPanel {
 						}
 					}
 					
-		
-					
-					
+												
 					if (parar() || bateu()) {
-						System.out.println("X:"+peca.getX());
 						contador = 0;	
 
 						int x = peca.getX() / 20;
@@ -177,13 +175,13 @@ public class Grid extends JPanel {
 			g.drawLine((i*grid), 0, (i*grid), 480); //vertical
 			g.drawLine(0, (i*grid), 480, (i*grid));//horizontal
 		}
-		/*
+		
 		for(int i = 0; i <24; i++) {
 			g.drawString(i+" ", (i * 20), 20);			
 		}
 		for(int x = 1; x <24; x++) {
 			g.drawString(x+" ", 3, (x * 20)+20);
-		}*/
+		}
 	
 		for(int row = 0; row < mapa.length; row++) {
 			for(int col = 0; col < mapa[row].length; col++) {
@@ -200,8 +198,17 @@ public class Grid extends JPanel {
 			direcao-=20;		
 	}
 	public void moverDireita() {
-		if (direcao + (peca.getLargura() * 20) <= 320)
+		if (!excedeLimiteLateralDireito()) {
 			direcao+=20;		
+		}
+	}
+	public boolean excedeLimiteLateralDireito() {
+		if (direcao + (peca.getLargura() * 20) <= 300) {
+			if(!parar() || !bateu()) {
+				return false;
+			}
+		}
+		return true;
 	}
 	public void moverBaixo() {
 		if (parar()) {
@@ -210,7 +217,9 @@ public class Grid extends JPanel {
 			contador+=20;
 		}
 	}
-	public void rotacionar() {		
-		peca.rotacionar();
+	public void rotacionar() {	
+		if (!excedeLimiteLateralDireito()) {
+			peca.rotacionar();
+		}
 	}	
 }
