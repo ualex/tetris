@@ -24,6 +24,7 @@ public abstract class Peca {
 				//	g.setColor(Color.yellow);
 				//	g.fillRect((col *20) +getX()+1, (row * 20) + getY()+1, 19, 19);
 				//	g.setColor(getColor(getCor()));
+					
 				}
 			}
 		}
