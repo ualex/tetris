@@ -1,8 +1,5 @@
 package tetris.pecas;
 
-
-
-
 public class O extends Peca {
 
 	byte [][] kernel = {{0,0,0,0},{0,1,1,0},{0,1,1,0},{0,0,0,0}};
