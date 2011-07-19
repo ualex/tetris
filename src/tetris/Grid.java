@@ -4,12 +4,22 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Random;
 import javax.swing.JPanel;
+import tetris.pecas.I;
+import tetris.pecas.J;
+import tetris.pecas.L;
+import tetris.pecas.O;
+import tetris.pecas.Peca;
+import tetris.pecas.S;
+import tetris.pecas.T;
+import tetris.pecas.Z;
 
 public class Grid extends JPanel {
 
 	private static final long serialVersionUID = 2077176596376777249L;
 	private boolean desenhar = true;
 	private boolean encerrar = false;
+	private boolean moverDireita = false;
+	private boolean moverEsquerda = false;
 	int pontuacao = 0;
 	int contador = 0;
 	int direcao = 120;
@@ -62,9 +72,21 @@ public class Grid extends JPanel {
 							pontuar();
 							perdeu();
 							contador = 0;
-						} else {
-							desenhar();
-							contador += 20;
+						} else {						
+							if (moverDireita && !excedeLimiteLateralDireito()) {								
+								moverDireita = false;
+								direcao+=20;
+								desenhar();
+							}else if (moverEsquerda && !excedeLimiteLateralEsquerdo()) {
+								moverEsquerda = false;
+								direcao-=20;
+								desenhar();								
+							} else {
+								desenhar();
+								contador += 20;
+							}
+							
+							
 						}
 						desenhar = false;						
 					}
@@ -226,24 +248,27 @@ public class Grid extends JPanel {
 	}
 
 	public void moverEsquerda() {
-		direcao -= 20;
-		desenhar = true;
+		desenhar      = true;
+		moverEsquerda = true;
 	}
 
-	public void moverDireita() {
-		direcao += 20;		
-		desenhar = true;
+	public void moverDireita() {	
+		desenhar     = true;
+		moverDireita = true;
 	}
 
 	public void moverBaixo() {
 		desenhar = true;
 	}
-
+	public boolean excedeLimiteLateralEsquerdo() {
+		System.out.println(direcao+"--"+peca.getX());
+		if (direcao == -20)
+			return true;
+		return false;
+	}
 	public boolean excedeLimiteLateralDireito() {
-		if (direcao + (peca.getLargura() * 20) <= 300) {
-			if (!parar() || !bateu()) {
-				return false;
-			}
+		if (direcao + (peca.getUltimaColuna() * 20) <= 300) {
+			return false;
 		}
 		return true;
 	}
